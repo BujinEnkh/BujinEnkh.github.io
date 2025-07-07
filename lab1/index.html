@@ -1,12 +1,116 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="mn">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Миний GitHub Page</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Миний CV</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+      display: flex;          /* Flexbox болгож байна */
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .content {
+      flex: 1;  /* Текст хэсэг өргөн эзэлнэ */
+      margin-right: 20px;
+    }
+
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;   /* Дугуй болгоно */
+      object-fit: cover;    /* Зургийг хэмжээнд тааруулна */
+      border: 2px solid #eee;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    ul {
+      list-style-type: square;
+      padding-left: 20px;
+    }
+
+    .contact {
+      margin-bottom: 20px;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .section h2 {
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Сайн байна уу! Энэ миний GitHub Pages вэб</h1>
-  <p>jbnj</p>
+  <div class="container">
+    <!-- Зүүн талд текст -->
+    <div class="content">
+      <h1>Бүжин</h1>
+      <p class="contact">
+        📧 Имэйл: bujine65@gmail.com<br>
+        ☎️ Утас: +976-80201139<br>
+        🌐 Вэб: <a href="https://bujin.github.io" target="_blank">bujin.github.io</a>
+      </p>
+
+      <div class="section">
+        <h2>Товч танилцуулга</h2>
+        <p>Намайг Энхболд овогтой Бүжин гэдэг. Би 20 настай. Одоогоор Монгол Улсын Их Сургууль-д "Мэдээллийн технологи" хөтөлбөрөөр суралцдаг. 3-р түвшний оюутан. </p>
+      </div>
+
+      <div class="section">
+        <h2>Боловсрол</h2>
+        <ul>
+          <li>"Эрдмийн Далай" цогцолбор сургууль (2010-2023)</li>
+          <li>МУИС – Мэдээллийн технологи, Бакалавр (2023 - 2027)</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Ажлын туршлага</h2>
+        <ul>
+          <li>Мэргэжлээрээ ажиллаж үзээгүй.</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Ур чадвар</h2>
+        <ul>
+          <li>HTML, CSS, JavaScript</li>
+          <li>C, C++</li>
+          <li>Git, GitHub</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>Холбоо барих</h2>
+        <p>Надад имэйл илгээхийг хүсвэл <a href="mailto:bujine65@gmail.com">энд дарна уу</a>.</p>
+      </div>
+    </div>
+
+    <!-- Баруун талд зураг -->
+    <div>
+      <img src="profile.jpg" alt="Profile Picture" class="profile-pic">
+    </div>
+  </div>
 </body>
 </html>
