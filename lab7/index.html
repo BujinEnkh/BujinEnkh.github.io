@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Tasks</title>
+</head>
+<body>
+  <script>
+    // 1. Гараас өгсөн тооны цифрүүдийн нийлбэр нь палиндром эсэх
+    function isPalindrome(str) {
+      return str === str.split('').reverse().join('');
+    }
+    const num1 = Number(prompt("1) Тоо оруулна уу:"));
+    const sumDigits = String(num1).split('').reduce((acc, d) => acc + Number(d), 0);
+    alert("Цифрүүдийн нийлбэр: " + sumDigits +
+          " → Палиндром эсэх: " + isPalindrome(String(sumDigits)));
+
+    // 2. Чоно туулайг гүйцэх хугацаа
+    const distance = Number(prompt("2) Зайг км-ээр оруул:"));
+    const relativeSpeed = 25 - 18; // km/h
+    const hours = distance / relativeSpeed;
+    const totalSeconds = Math.round(hours * 3600);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    alert(`Чоно ${minutes} минут ${seconds} секундийн дараа гүйцнэ.`);
+
+    // 3. Байшингийн орц, давхар, хаалга
+    const apt = Number(prompt("3) Тоот оруул:"));
+    const floors = 9, entrances = 3, perFloor = 4;
+    const perEntrance = floors * perFloor;
+    const entrance = Math.ceil(apt / perEntrance);
+    const local = apt - (entrance - 1) * perEntrance;
+    const floor = Math.ceil(local / perFloor);
+    const door = ((local - 1) % perFloor) + 1;
+    alert(`${apt}-р тоот нь ${entrance}-р орц, ${floor}-р давхар, ${door}-р хаалга.`);
+
+    // 4. Array-д өгөгдсөн 5 тооны хамгийн бага ерөнхий хуваагдагч (ХБЕХ)
+    function gcd(a, b) {
+      return b === 0 ? a : gcd(b, a % b);
+    }
+    function lcm(a, b) {
+      return Math.abs(a * b) / gcd(a, b);
+    }
+    const arr = prompt("4) 5 тоо зайгаар тусгаарлан оруул:").split(" ").map(Number);
+    const lcmResult = arr.reduce((acc, n) => lcm(acc, n), arr[0]);
+    alert("ХБЕХ = " + lcmResult);
+
+    // 5. Өглөө бол квадрат, орой бол язгуур
+    const num5 = Number(prompt("5) Тоо оруул:"));
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      alert("Өглөө тул квадрат: " + (num5 ** 2));
+    } else {
+      alert("Орой тул язгуур: " + Math.sqrt(num5));
+    }
+  </script>
+</body>
+</html>
