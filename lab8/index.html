@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <title>Дүүжилдэг тоглоом</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #333;
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
+    }
+    h1 { margin: 20px; }
+    #game {
+      max-width: 700px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    #game:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(0,150,255,0.5);
+  }
+    #question { font-size: 20px; margin: 15px 0; }
+    #word { font-size: 28px; letter-spacing: 10px; margin: 20px 0; }
+    #letters button {
+      margin: 5px; padding: 10px 15px;
+      border: none; border-radius: 6px;
+      background: #0095eb; color: white;
+      font-weight: bold; cursor: pointer;
+      transition: 0.3s;
+    }
+    
+    #letters button {
+      animation: pulse 2s infinite;
+    }
+    #letters button:hover { background: #007acc; }
+    #hangman {
+      margin: 20px auto;
+      width: 200px; height: 250px;
+      position: relative;
+    }
+    .gallows {
+      position: absolute;
+      width: 5px; height: 250px;
+      background: #333;
+      left: 20px; top: 0;
+    }
+    .beam {
+      position: absolute;
+      width: 100px; height: 5px;
+      background: #333;
+      left: 20px; top: 0;
+    }
+    .rope {
+      position: absolute;
+      width: 2px; height: 40px;
+      background: #333;
+      left: 115px; top: 5px;
+    }
+    .part {
+      position: absolute;
+      background: #333;
+      animation: fadeIn 0.5s ease forwards, swing 2s ease-in-out infinite;
+      transform-origin: top center;
+    }
+    .head {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      top: 45px; left: 95px;
+    }
+    .body {
+      width: 5px; height: 60px;
+      top: 85px; left: 113px;
+    }
+    .arm-left {
+      width: 40px; height: 5px;
+      top: 100px; left: 75px;
+    }
+    .arm-right {
+      width: 40px; height: 5px;
+      top: 100px; left: 115px;
+    }
+    .leg-left {
+      width: 40px; height: 5px;
+      top: 145px; left: 75px;
+      transform: rotate(30deg);
+    }
+    .leg-right {
+      width: 40px; height: 5px;
+      top: 145px; left: 115px;
+      transform: rotate(-30deg);
+    }
+    #message { font-size: 20px; font-weight: bold; margin-top: 15px; }
+    #startBtn {
+      padding: 12px 25px; background: #ff5e62;
+      color: white; border: none; border-radius: 8px;
+      cursor: pointer; font-size: 16px; margin-bottom: 20px;
+    }
+    #startBtn:hover { background: #ff9966; }
+    @keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes swing {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(3deg); }
+  50% { transform: rotate(0deg); }
+  75% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+  </style>
+</head>
+<body>
+
+  <h1>🎮 HANGMAN</h1>
+  <div id="game">
+    <button id="startBtn" onclick="startGame()">Эхлэх</button>
+    <div id="question"></div>
+    <div id="word"></div>
+    <div id="letters"></div>
+    <div id="hangman">
+      <div class="gallows"></div>
+      <div class="beam"></div>
+      <div class="rope"></div>
+    </div>
+    <div id="message"></div>
+  </div>
+
+<script>
+  const questions = [
+    'Монгол улсын нийслэл?', 'Хамгийн том амьтан?', 'Хамгийн өндөр уул?',
+    'Монголын хамгийн том нуур?', 'Хамгийн хурдан амьтан?', 'Монголын үндэсний спорт?',
+    'Хамгийн урт гол?', 'Хамгийн том тив?'
+  ];
+  const answers = [
+    'УЛААНБААТАР', 'ХАЛИМ', 'ЭВЕРЕСТ', 'УВС', 'ГЕПАРД', 'БӨХ', 'НИЛ', 'АЗИ'
+  ];
+
+  let currentAnswer = "";
+  let displayWord = [];
+  let wrongGuesses = 0;
+  const maxWrong = 6;
+  let usedQuestions = [];
+
+  function startGame() {
+    usedQuestions = [];
+    loadQuestion();
+  }
+
+  function loadQuestion() {
+    if (usedQuestions.length === questions.length) {
+      document.getElementById("question").innerText = " Бүх асуултыг зөв таалаа!";
+      document.getElementById("word").innerText = "";
+      document.getElementById("letters").innerHTML = "";
+      document.getElementById("hangman").innerHTML = '<div class="gallows"></div><div class="beam"></div><div class="rope"></div>';
+      return;
+    }
+    let idx;
+    do {
+      idx = Math.floor(Math.random() * questions.length);
+    } while (usedQuestions.includes(idx));
+    usedQuestions.push(idx);
+
+    document.getElementById("question").innerText = questions[idx];
+    currentAnswer = answers[idx].toUpperCase();
+    displayWord = Array(currentAnswer.length).fill("_");
+    document.getElementById("word").innerText = displayWord.join(" ");
+    wrongGuesses = 0;
+    document.getElementById("hangman").innerHTML = '<div class="gallows"></div><div class="beam"></div><div class="rope"></div>';
+    document.getElementById("message").innerText = "";
+
+    const lettersDiv = document.getElementById("letters");
+    lettersDiv.innerHTML = "";
+    const alphabet = "АБВГДЕЁЖЗИЙКЛМНОӨПРСТУҮФХЦЧШЩЪЫЬЭЮЯ".split("");
+    for (let ch of alphabet) {
+      const btn = document.createElement("button");
+      btn.innerText = ch;
+      btn.onclick = () => guessLetter(ch);
+      lettersDiv.appendChild(btn);
+    }
+  }
+
+  function guessLetter(ch) {
+    if (currentAnswer.includes(ch)) {
+      let found = false;
+      for (let i = 0; i < currentAnswer.length; i++) {
+        if (currentAnswer[i] === ch && displayWord[i] === "_") {
+          displayWord[i] = ch;
+          found = true;
+          break;
+        }
+      }
+      if (found) {
+        document.getElementById("word").innerText = displayWord.join(" ");
+        if (!displayWord.includes("_")) {
+          document.getElementById("message").innerText = "Зөв таалаа!";
+          setTimeout(loadQuestion, 1500);
+        }
+      }
+    } else {
+      wrongGuesses++;
+      drawHangman();
+      if (wrongGuesses >= maxWrong) {
+        document.getElementById("message").innerText = " Тоглоом дууслаа! Хариулт: " + currentAnswer;
+      }
+    }
+  }
+
+  function drawHangman() {
+    const hangmanDiv = document.getElementById("hangman");
+    hangmanDiv.innerHTML = '<div class="gallows"></div><div class="beam"></div><div class="rope"></div>';
+    if (wrongGuesses >= 1) hangmanDiv.appendChild(createPart("head"));
+    if (wrongGuesses >= 2) hangmanDiv.appendChild(createPart("body"));
+    if (wrongGuesses >= 3) hangmanDiv.appendChild(createPart("arm-left"));
+    if (wrongGuesses >= 4) hangmanDiv.appendChild(createPart("arm-right"));
+    if (wrongGuesses >= 5) hangmanDiv.appendChild(createPart("leg-left"));
+    if (wrongGuesses >= 6) hangmanDiv.appendChild(createPart("leg-right"));
+  }
+
+  function createPart(cls) {
+    const part = document.createElement("div");
+    part.className = "part " + cls;
+    return part;
+  }
+</script>
+
+</body>
+</html>
